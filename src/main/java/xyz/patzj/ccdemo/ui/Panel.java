@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import xyz.patzj.ccdemo.action.Encryptor;
+import xyz.patzj.ccdemo.action.Decryptor;
 
 /**
  * Primary container of other UI components.
@@ -98,9 +100,29 @@ public class Panel extends JPanel {
         JButton btnExec = new JButton("Execute");
         JButton btnClr = new JButton("Clear");
 
+        btnExec.addActionListener(new ExecListener());
+
         pnl.add(btnExec);
         pnl.add(btnClr);
 
         add(pnl, BorderLayout.SOUTH);
+    }
+
+    private class ExecListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            Object src = event.getSource();
+            String plain = "";
+            String cipher = "";
+
+            if(radEncrypt.isSelected()) {
+                plain = txtPlain.getText();
+                txtCipher.setText(plain);
+            } else {
+                cipher = txtCipher.getText();
+                txtPlain.setText(cipher);
+            }
+        }
     }
 }
