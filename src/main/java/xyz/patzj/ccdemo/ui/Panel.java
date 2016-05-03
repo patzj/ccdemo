@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import xyz.patzj.ccdemo.action.Cryptor;
 import xyz.patzj.ccdemo.action.Encryptor;
 import xyz.patzj.ccdemo.action.Decryptor;
 
@@ -112,16 +113,25 @@ public class Panel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            Object src = event.getSource();
-            String plain = "";
-            String cipher = "";
+            Cryptor cryptor;
+            String plain = txtPlain.getText();
+            String cipher = txtCipher.getText();
+            int key;
+
+            try {
+                key = Integer.parseInt(txtKey.getText());
+            } catch(NumberFormatException e) {
+                key = 3;
+            }
 
             if(radEncrypt.isSelected()) {
-                plain = txtPlain.getText();
-                txtCipher.setText(plain);
+                cryptor = new Encryptor(plain, key);
+                cryptor.doProcess();
+                txtCipher.setText(cryptor.getProcessed());
             } else {
-                cipher = txtCipher.getText();
-                txtPlain.setText(cipher);
+                cryptor = new Decryptor(cipher, key);
+                cryptor.doProcess();
+                txtPlain.setText(cryptor.getProcessed());
             }
         }
     }

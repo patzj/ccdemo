@@ -3,43 +3,46 @@ package xyz.patzj.ccdemo.action;
 /**
  * @author patzj
  */
-public class Encryptor {
-
-    private int key;
-    private String plain;
-    private StringBuilder cipher;
+public class Encryptor extends Cryptor {
 
     public Encryptor() { }
 
-    public Encryptor(String plain, int key) {
-        this.plain = plain;
-        this.key = key;
+    public Encryptor(String raw, int key) {
+        super(raw, key);
     }
 
-    public String getPlain() {
-        return plain;
-    }
-
-    public void setPlain(String plain) {
-        this.plain = plain;
-    }
-
-    public int getKey() {
-        return key;
-    }
-
+    @Override
     public void setKey(int key) {
-        if(key > 0)
-            this.key = key;
-        else
-            this.key = (-1) * key;
+        if(key < 0)
+            key *= -1;
+
+        super.setKey(key);
     }
 
-    public String getCipher() {
-        return cipher.toString();
+    @Override
+    protected void doFormat() {
+        setRaw(getRaw().replaceAll("\\s", "").toLowerCase());
     }
 
-    public void doEncrypt() {
+    @Override
+    public void doProcess() {
+        doFormat();
+        StringBuilder temp = new StringBuilder();
+        byte[] rawBytes = getRaw().getBytes();
 
+        int len = rawBytes.length;
+        for(int i = 0; i < len; i++) {
+            rawBytes[i] -= Cryptor.BUFFER;
+            rawBytes[i] += getKey();
+
+            int rem = rawBytes[i] % LIMIT;
+            if(rem > 0)
+                rawBytes[i] = (byte) rem;
+
+            rawBytes[i] += Cryptor.BUFFER;
+            temp.append((char) rawBytes[i]);
+        }
+
+        setProcessed(temp.toString().toUpperCase());
     }
 }
