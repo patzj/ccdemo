@@ -20,18 +20,17 @@ public class Encryptor extends Cryptor {
 
         int len = rawBytes.length;
         for(int i = 0; i < len; i++) {
-            rawBytes[i] -= Cryptor.BUFFER;
             setKey(getKey() % Cryptor.LIMIT);
+            rawBytes[i] -= Cryptor.BUFFER;
             rawBytes[i] += getKey();
 
-            int rem = rawBytes[i] % LIMIT;
-            if(rem > 0)
-                rawBytes[i] = (byte) rem;
+            if(rawBytes[i] > Cryptor.LIMIT)
+                rawBytes[i] -= Cryptor.LIMIT;
 
             rawBytes[i] += Cryptor.BUFFER;
             temp.append((char) rawBytes[i]);
         }
-        System.out.println(getKey());
+
         setProcessed(temp.toString().toUpperCase());
     }
 }

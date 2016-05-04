@@ -20,8 +20,8 @@ public class Decryptor extends Cryptor {
 
         int len = rawBytes.length;
         for(int i = 0; i < len; i++) {
-            rawBytes[i] -= Cryptor.BUFFER;
             setKey(getKey() % Cryptor.LIMIT);
+            rawBytes[i] -= Cryptor.BUFFER;
             rawBytes[i] -= getKey();
 
             if(rawBytes[i] < 0)
@@ -30,7 +30,7 @@ public class Decryptor extends Cryptor {
             rawBytes[i] += Cryptor.BUFFER;
             temp.append((char) rawBytes[i]);
         }
-        System.out.println(getKey());
+
         setProcessed(temp.toString().toUpperCase());
     }
 }
