@@ -26,7 +26,7 @@ public class Panel extends JPanel {
     private JLabel lblKey;
     private JLabel lblPlain;
     private JLabel lblCipher;
-    private JLabel lblErr;
+    private JLabel lblMsg;
     private JTextField txtKey;
     private JTextField txtPlain;
     private JTextField txtCipher;
@@ -55,6 +55,7 @@ public class Panel extends JPanel {
         txtKey = new JTextField(4);
 
         radEncrypt.setSelected(true);
+        txtKey.setText("3");
 
         btnGrp.add(radEncrypt);
         btnGrp.add(radDecrypt);
@@ -74,7 +75,7 @@ public class Panel extends JPanel {
         JPanel pnlErr = new JPanel();
         lblPlain = new JLabel("Plain Text:");
         lblCipher = new JLabel("Cipher Text:");
-        lblErr = new JLabel("");
+        lblMsg = new JLabel("");
         txtPlain = new JTextField(28);
         txtCipher = new JTextField(28);
 
@@ -86,12 +87,12 @@ public class Panel extends JPanel {
         pnlDecrypt.add(lblCipher, BorderLayout.NORTH);
         pnlDecrypt.add(txtCipher);
 
-        pnlErr.add(lblErr);
+        pnlErr.add(lblMsg);
 
         pnl.setLayout(new FlowLayout(FlowLayout.LEFT));
         pnl.add(pnlEncrypt);
         pnl.add(pnlDecrypt);
-        pnl.add(lblErr);
+        pnl.add(lblMsg);
 
         add(pnl);
     }
@@ -102,6 +103,7 @@ public class Panel extends JPanel {
         JButton btnClr = new JButton("Clear");
 
         btnExec.addActionListener(new ExecListener());
+        btnClr.addActionListener(new ClrListener());
 
         pnl.add(btnExec);
         pnl.add(btnClr);
@@ -116,10 +118,11 @@ public class Panel extends JPanel {
             Cryptor cryptor;
             String plain = txtPlain.getText();
             String cipher = txtCipher.getText();
+            String msg = "";
             int key;
 
             try {
-                key = Integer.parseInt(txtKey.getText());
+                key = Integer.valueOf(txtKey.getText());
             } catch(NumberFormatException e) {
                 key = 3;
             }
@@ -128,11 +131,26 @@ public class Panel extends JPanel {
                 cryptor = new Encryptor(plain, key);
                 cryptor.doProcess();
                 txtCipher.setText(cryptor.getProcessed());
+                msg = "Encryption completed.";
             } else {
                 cryptor = new Decryptor(cipher, key);
                 cryptor.doProcess();
                 txtPlain.setText(cryptor.getProcessed());
+                msg = "Decryption completed.";
             }
+            
+            lblMsg.setText(msg);
+        }
+    }
+
+    private class ClrListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            txtKey.setText("3");
+            txtPlain.setText("");
+            txtCipher.setText("");
+            lblMsg.setText("");
         }
     }
 }

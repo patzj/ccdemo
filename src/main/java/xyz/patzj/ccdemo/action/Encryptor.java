@@ -1,6 +1,7 @@
 package xyz.patzj.ccdemo.action;
 
 /**
+ * Caesar Cipher encryption algorithm class.
  * @author patzj
  */
 public class Encryptor extends Cryptor {
@@ -12,19 +13,6 @@ public class Encryptor extends Cryptor {
     }
 
     @Override
-    public void setKey(int key) {
-        if(key < 0)
-            key *= -1;
-
-        super.setKey(key);
-    }
-
-    @Override
-    protected void doFormat() {
-        setRaw(getRaw().replaceAll("\\s", "").toLowerCase());
-    }
-
-    @Override
     public void doProcess() {
         doFormat();
         StringBuilder temp = new StringBuilder();
@@ -33,6 +21,7 @@ public class Encryptor extends Cryptor {
         int len = rawBytes.length;
         for(int i = 0; i < len; i++) {
             rawBytes[i] -= Cryptor.BUFFER;
+            setKey(getKey() % Cryptor.LIMIT);
             rawBytes[i] += getKey();
 
             int rem = rawBytes[i] % LIMIT;
@@ -42,7 +31,7 @@ public class Encryptor extends Cryptor {
             rawBytes[i] += Cryptor.BUFFER;
             temp.append((char) rawBytes[i]);
         }
-
+        System.out.println(getKey());
         setProcessed(temp.toString().toUpperCase());
     }
 }

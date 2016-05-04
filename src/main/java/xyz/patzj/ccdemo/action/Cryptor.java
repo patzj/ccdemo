@@ -1,6 +1,7 @@
 package xyz.patzj.ccdemo.action;
 
 /**
+ * Super class for Caesar Cipher algorithm.
  * @author patzj
  */
 public abstract class Cryptor {
@@ -8,7 +9,7 @@ public abstract class Cryptor {
     private String raw;
     private String processed;
     private int key;
-    protected abstract void doFormat();
+
     public abstract void doProcess();
     public static final byte BUFFER = 96;
     public static final byte LIMIT = 26;
@@ -16,8 +17,8 @@ public abstract class Cryptor {
     public Cryptor() { }
 
     public Cryptor(String raw, int key) {
-        this.raw = raw;
-        this.key = key;
+        setRaw(raw);
+        setKey(key);
     }
 
     public String getRaw() {
@@ -41,6 +42,10 @@ public abstract class Cryptor {
     }
 
     public void setKey(int key) {
-        this.key = key;
+        this.key = Math.abs(key);
+    }
+
+    protected void doFormat() {
+        setRaw(getRaw().replaceAll("[\\W\\s\\d]", "").toLowerCase());
     }
 }
