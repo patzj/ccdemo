@@ -124,7 +124,8 @@ public class Panel extends JPanel {
             try {
                 key = Integer.valueOf(txtKey.getText());
             } catch(NumberFormatException e) {
-                key = 3;
+                txtKey.setText("3");
+                key = Integer.valueOf(txtKey.getText());
             }
 
             if(radEncrypt.isSelected()) {
@@ -147,6 +148,7 @@ public class Panel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent event) {
+            radEncrypt.setSelected(true);
             txtKey.setText("3");
             txtPlain.setText("");
             txtCipher.setText("");
